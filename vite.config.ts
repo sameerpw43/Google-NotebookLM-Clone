@@ -30,11 +30,31 @@ export default defineConfig({
   build: {
     outDir: path.resolve(import.meta.dirname, "dist/public"),
     emptyOutDir: true,
+    rollupOptions: {
+      external: [
+        // Exclude all server-side modules from client bundle
+        /^server\/.*/,
+        /^@neondatabase\/.*/,
+        /^drizzle-orm\/.*/,
+        /^express$/,
+        /^multer$/,
+        /^pdf-parse$/,
+        /^@google\/genai$/,
+        /^ws$/,
+        /^fs$/,
+        /^path$/,
+        /^http$/,
+        /^dotenv\/.*/
+      ]
+    }
   },
   server: {
     fs: {
       strict: true,
-      deny: ["**/.*"],
+      deny: ["**/.*", "../server/**"],
     },
   },
+  optimizeDeps: {
+    exclude: ["server"]
+  }
 });
