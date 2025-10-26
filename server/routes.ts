@@ -129,8 +129,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
         citations: null,
       });
 
+      // Debug: Log PDF text content availability
+      console.log('PDF text content length:', pdf.textContent?.length || 0);
+      console.log('PDF text preview:', pdf.textContent?.substring(0, 200) || 'No text content');
+
       // Chunk PDF text intelligently to optimize token usage
       const chunks = chunkPDFText(pdf.textContent || '', 4000);
+      console.log('Number of chunks created:', chunks.length);
       
       // Simple relevance scoring: find chunks containing question keywords
       const questionWords = question.toLowerCase().split(/\s+/).filter(w => w.length > 3);
@@ -153,6 +158,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const pdfContext = relevantChunks.length > 0 
         ? relevantChunks.join('\n\n---\n\n')
         : chunks.slice(0, 2).join('\n\n---\n\n');
+
+      console.log('PDF context length being sent to AI:', pdfContext.length);
+      console.log('PDF context preview:', pdfContext.substring(0, 300));
 
       // Set headers for Server-Sent Events
       res.setHeader('Content-Type', 'text/event-stream');

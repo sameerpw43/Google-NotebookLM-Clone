@@ -5,12 +5,12 @@ import ws from "ws";
 import * as schema from "@shared/schema";
 
 neonConfig.webSocketConstructor = ws;
-
-if (!process.env.DATABASE_URL) {
+let DATABASE_URL ='postgresql://neondb_owner:npg_8SrJL4iflFae@ep-damp-cake-a1yydf8f-pooler.ap-southeast-1.aws.neon.tech/neondb?sslmode=require';
+if (!DATABASE_URL) {
   throw new Error(
     "DATABASE_URL must be set. Did you forget to provision a database?",
   );
 }
 
-export const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+export const pool = new Pool({ connectionString: DATABASE_URL });
 export const db = drizzle({ client: pool, schema });
