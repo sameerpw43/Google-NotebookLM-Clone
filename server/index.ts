@@ -4,6 +4,8 @@ import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 
 const app = express();
+import path from "node:path";
+import {fileURLToPath} from 'url';
 
 declare module 'http' {
   interface IncomingMessage {
